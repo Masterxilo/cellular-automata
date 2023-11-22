@@ -232,11 +232,27 @@ bool should_log() {
 }
 
 void live_log() {
+    auto cells = config::rows * config::cols;
     // add main loop info to the buffer
+
+auto n = 2 * cells * gIterationsPerSecond * sizeof(GridType) ;
+auto t = 448000000000;
+auto p = (n * 100.) / t;
+    // The RTX 2080 has 2944 CUDA cores and a boost clock at 1800MHz. 8GB of GDDR6 memory features a 256-bit bus for 448GB/sec of 
+    // In the end, the GeForce RTX 2080 has 46 SMs that contain 2944 CUDA cores, 368 tensor cores, 46 RT cores, 184 texture units, 64 ROPS, and 4 MB of L2 cache.
     gLiveLogBuffer << " | It/s: " << gIterationsPerSecond
+        << " | main memory rw 2xcells|bytes/s: " << n << "= " << p << "% of RTX 2080 theoretical 448000000000 bytes/s"
                    << " | Main Loop: "
                    // average time per iteration
                    << gNsBetweenSeconds / gIterationsPerSecond << " ns";
+
+// 30k * 30k (ca 1 GB of memory for the grid)
+// It: 1072 | Evolve Kernel: 21568882 ns | Active cells: 38123233 | It/s: 51 | main memory rw 2xcells|bytes/s: 91800000000= 20.4911% of RTX 2080 theoretical 448000000000 bytes/s | Main Loop: 20200426 ns
+
+    // TODO for another 5x, improve the memory access pattern... maybe explicitly use shared memory for the few reused cells, striding rightwards and upwards in the grid, find ideal parameters...
+
+// cellular automata simulation is memory bandwidth limited (especially for such simple rule) not memory amount limited when it comes to cell updates per second!
+
     // print the buffer
     std::cout << gLiveLogBuffer.str() << std::flush;
     // reset the buffer

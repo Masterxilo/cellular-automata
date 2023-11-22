@@ -53,8 +53,11 @@ AutomataBase::AutomataBase(const uint randSeed,
 
     // allocate memory
     // gpu only, not managed
-    CUDA_ASSERT(cudaMalloc(&mGlobalRandState, mGridSize * sizeof(curandState)));
+    //printf("Allocating %lu bytes for curandState, %d per cell.\n", mGridSize * sizeof(curandState), sizeof(curandState));
+    //CUDA_ASSERT(cudaMalloc(&mGlobalRandState, mGridSize * sizeof(curandState))); //  sizeof(curandState) = 48 bytes, what the hell we don't need this good randomness...
+
     // must be managed so pattern can be loaded from file
+    printf("Allocating 2x %lu bytes for grid.\n", mGridBytes);
     CUDA_ASSERT(cudaMallocManaged(&grid, mGridBytes));
     CUDA_ASSERT(cudaMallocManaged(&nextGrid, mGridBytes));
     CUDA_ASSERT(cudaMallocManaged(&mActiveCellCount, sizeof(uint)));

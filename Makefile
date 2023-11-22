@@ -19,11 +19,10 @@ endif
 
 COMMON_FLAGS := -Wall -O3 # Optimization level 3
 CFLAGS := -std=c++17 -fopenmp $(COMMON_FLAGS) $(EXTRA_FLAGS) # -g
-CUFLAGS := --compiler-options "$(COMMON_FLAGS)" $(EXTRA_FLAGS) -m64 -gencode arch=compute_52,code=sm_52 -gencode arch=compute_60,code=sm_60 -gencode arch=compute_61,code=sm_61 -gencode arch=compute_70,code=sm_70 -gencode arch=compute_75,code=sm_75 -gencode arch=compute_80,code=sm_80
+CUFLAGS := --compiler-options "$(COMMON_FLAGS)" $(EXTRA_FLAGS) -m64 -gencode arch=compute_75,code=sm_75
+# my rtx 2080 is compute capability 7.5 https://developer.nvidia.com/cuda-gpus
+#-gencode arch=compute_52,code=sm_52 -gencode arch=compute_60,code=sm_60 -gencode arch=compute_61,code=sm_61 -gencode arch=compute_70,code=sm_70 -gencode arch=compute_75,code=sm_75 -gencode arch=compute_80,code=sm_80
 
-ifndef OLDER_CUDA
-CUFLAGS := $(CUFLAGS) -gencode arch=compute_86,code=sm_86 -gencode arch=compute_86,code=compute_86
-endif
 
 SOURCES := $(shell find $(SRCDIR) -type f -name *.cpp)
 OBJECTS := $(patsubst $(SRCDIR)/%,$(BUILDDIR)/%,$(SOURCES:.cpp=.o))

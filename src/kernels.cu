@@ -15,11 +15,16 @@ __global__ void k_setup_rng(const uvec2 dims,
 
     for (uint idx = idxMin; idx < idxMax; idx += stride) {
         const uint x = idx % dims.x;
-        if (NH_RADIUS < x && x < xMax)
-            curand_init(seed, idx, 0, &globalRandState[idx]);
+        //if (NH_RADIUS < x && x < xMax)
+            //curand_init(seed, idx, 0, &globalRandState[idx]);
     }
 }
-
+inline __device__ unsigned int hash(unsigned int x) {
+    x = ((x >> 16) ^ x) * 0x45d9f3b;
+    x = ((x >> 16) ^ x) * 0x45d9f3b;
+    x = (x >> 16) ^ x;
+    return x;
+}
 __global__ void k_init_grid(GridType *const grid, const uvec2 dims,
                             curandState *const __restrict__ globalRandState,
                             const float spawnProbability) {
@@ -33,8 +38,8 @@ __global__ void k_init_grid(GridType *const grid, const uvec2 dims,
 
     for (uint idx = idxMin; idx < idxMax; idx += stride) {
         const uint x = idx % dims.x;
-        grid[idx] = (NH_RADIUS < x) * (x < xMax) *
-                    (curand_uniform(&globalRandState[idx]) < spawnProbability);
+        grid[idx] = hash(idx) % 2;
+                    //(curand_uniform(&globalRandState[idx]) < spawnProbability);
     }
 }
 
