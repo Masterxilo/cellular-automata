@@ -251,6 +251,38 @@ auto p = (n * 100.) / t;
 
     // TODO for another 5x, improve the memory access pattern... maybe explicitly use shared memory for the few reused cells, striding rightwards and upwards in the grid, find ideal parameters...
 
+// note: cpu memory bandwith is about 10 lower:
+// https://codearcana.com/posts/2013/05/18/achieving-maximum-memory-bandwidth.html
+// https://github.com/awreece/memory-bandwidth-demo
+/*
+ubuntu@ubuntu44:~/memory-bandwidth-demo$ ./memory_profiler 
+           read_memory_rep_lodsq: 10.07 GiB/s
+                read_memory_loop: 12.54 GiB/s
+                 read_memory_sse: 11.98 GiB/s
+                 read_memory_avx: 12.50 GiB/s
+        read_memory_prefetch_avx:  7.95 GiB/s
+               write_memory_loop: 12.44 GiB/s
+          write_memory_rep_stosq: 22.97 GiB/s
+                write_memory_sse: 12.87 GiB/s
+    write_memory_nontemporal_sse: 22.17 GiB/s
+                write_memory_avx: 12.46 GiB/s
+    write_memory_nontemporal_avx: 22.12 GiB/s
+             write_memory_memset: 22.97 GiB/s
+memory_profiler: main.c:51: timeitp: Assertion `SIZE % omp_get_max_threads() == 0' failed.
+Aborted (core dumped)
+
+*/
+// but probably the cpu implementation sucks...
+/*
+It: 44 | Evolve Function: 342304009 ns | Active cells: 104066846 | It/s: 4 | main memory rw 2xcells|bytes/s: 7200000000= 1.60714% of RTX 2080 theoretical 448000000000 bytes/s | Main Loop: 412621445 ns^C
+
+7 200 000 000 <- well 7 GB s
+
+that is somewhere in the ballpark...
+
+wow this system has bad RAM access...
+*/
+
 // cellular automata simulation is memory bandwidth limited (especially for such simple rule) not memory amount limited when it comes to cell updates per second!
 
     // print the buffer
