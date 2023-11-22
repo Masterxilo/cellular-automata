@@ -251,7 +251,7 @@ auto p = (n * 100.) / t;
 
     // TODO for another 5x, improve the memory access pattern... maybe explicitly use shared memory for the few reused cells, striding rightwards and upwards in the grid, find ideal parameters...
 
-// note: cpu memory bandwith is about 10 lower:
+// note: cpu memory bandwith is about 20x lower:
 // https://codearcana.com/posts/2013/05/18/achieving-maximum-memory-bandwidth.html
 // https://github.com/awreece/memory-bandwidth-demo
 /*
