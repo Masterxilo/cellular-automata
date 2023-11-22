@@ -286,6 +286,44 @@ wow this system has bad RAM access...
 // cellular automata simulation is memory bandwidth limited (especially for such simple rule) not memory amount limited when it comes to cell updates per second!
 
 // https://github.com/bryanoliveira/cellular-automata/issues/10
+/*
+ Please clarify: This program is memory bandwidth limited, nothing else #10
+Open
+Masterxilo opened this issue Nov 23, 2023 · 2 comments
+Open
+Please clarify: This program is memory bandwidth limited, nothing else
+#10
+Masterxilo opened this issue Nov 23, 2023 · 2 comments
+Comments
+@Masterxilo
+Masterxilo commented Nov 23, 2023
+
+I think it would help the next person learning about this stuff to mention that in your readme.
+
+That's why you don't see much speedup when adding more cores.
+
+I measured/calculated 20% memory bandwidth efficiency for the GPU implementation and 25-50% for the CPU implementation.
+
+None of your evaluations or observations mention memory bandwidth at all.
+
+Also, using curand is what makes your implementation not support even a 30k * 30k = 900 MB grid. sizeof(curandState) = 48 bytes...
+If you get rid of curand and use any other decent hash, you can max out the size of the grid.
+@Masterxilo
+Author
+Masterxilo commented Nov 23, 2023 •
+
+your own calculation/measurement also shows that the program is not quite reaching the memory bandwidth bound:
+
+13500*13500*729*2 = 265720500000, 266 GB/s, which is a bit short of the ca 760 GB/s of these cards (rtx 3080)
+@Masterxilo
+Author
+Masterxilo commented Nov 23, 2023
+
+It would be interesting to study how many instructions could be performed during the time of waiting for the memory.
+
+Probably, the amount of cell updates per second could be scaled far beyond the memory bandwidth by doing multiple update steps without accessing main memory in between, but of course then you have to be more careful with coordinating the memory access or overlapping the update regions (and thus performing some redundant updates) to ensure all interactions propagate correctly (information flows at a rate of one cell per update, and to avoid race conditions/nondeterministic updates, you should probably not access memory updated by other thread blocks...).
+
+*/
 
     // print the buffer
     std::cout << gLiveLogBuffer.str() << std::flush;
