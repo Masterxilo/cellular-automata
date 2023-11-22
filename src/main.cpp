@@ -285,6 +285,8 @@ wow this system has bad RAM access...
 
 // cellular automata simulation is memory bandwidth limited (especially for such simple rule) not memory amount limited when it comes to cell updates per second!
 
+// https://github.com/bryanoliveira/cellular-automata/issues/10
+
     // print the buffer
     std::cout << gLiveLogBuffer.str() << std::flush;
     // reset the buffer
