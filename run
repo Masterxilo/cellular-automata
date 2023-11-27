@@ -9,4 +9,6 @@ make automata
 #./automata -x 100 -y 100 -r 
 #./automata -x 30000 -y 30000 
 
-./automata -x 30000 -y 30000 --cpu
+#./automata -x 30000 -y 30000  --render # --cpu
+
+./automata -x 30000 -y 30000 --render

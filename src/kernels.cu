@@ -94,11 +94,15 @@ k_update_grid_buffers(const GridType *const grid, const uvec2 dims,
 }
 
 __global__ void
-k_evolve_count_rule(const GridType *const grid, GridType *const nextGrid,
-                    const uvec2 dims,
-                    curandState *const __restrict__ globalRandState,
-                    const float virtualSpawnProbability,
-                    const bool countAliveCells, uint *const activeCellCount) {
+k_evolve_count_rule(
+    const GridType *const grid,
+    GridType *const nextGrid,
+    const uvec2 dims,
+    curandState *const __restrict__ globalRandState,
+    const float virtualSpawnProbability,
+    const bool countAliveCells,
+    uint *const activeCellCount
+) {
     // idxMin = thread ID + skip safety rows + skip safety cols
     // idxMax = y - 1 full rows + last row cols
     const uint stride = gridDim.x * blockDim.x,
