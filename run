@@ -11,4 +11,5 @@ make automata
 
 #./automata -x 30000 -y 30000  --render # --cpu
 
+# ca 50 it/s
 ./automata -x 30000 -y 30000 --render
